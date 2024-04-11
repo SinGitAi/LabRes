@@ -1,6 +1,6 @@
 from tables import Tables
-from formuls_calculation_functions import IntervalCalculation
-from matplotlib import pyplot as pp
+# from formuls_calculation_functions import IntervalCalculation
+# from matplotlib import pyplot as pp
 # DATA = [1782, 1963, 1791, 1287, 1063, 1222, 1206, 1329, 1528, 1238, 1848, 1858, 1289, 1586, 772,
 #         1266, 1242, 1816, 951, 1693, 1643, 1497, 1280, 1760, 1717, 1212, 1238, 1259, 1901, 1022,
 #         818, 1894, 1972, 1216, 1973, 1595, 1324, 1206, 1136, 1111, 1670, 1765, 1517, 762, 2092,
@@ -33,19 +33,21 @@ second_table_values = tables.selecting_and_geting_value_of_table(2)
 # print(second_table_values)
 # Расчет 3 табоицы возможен только после расчета 2 таблицы
 third_table = tables.selecting_and_printing_table(3)
-# third_table_values = tables.selecting_and_geting_value_of_table(3)
+third_table_values = tables.selecting_and_geting_value_of_table(3)
 # print(third_table_values["Xi"])
-interval = IntervalCalculation(second_table_values)
-size_of_interval, count_of_steps = interval.interval_calculation()
-forth_table = tables.selecting_and_printing_table(4, size_of_interval, count_of_steps)
+# interval = IntervalCalculation(second_table_values)
+# size_of_interval, count_of_steps = interval.interval_calculation()
+# forth_table = tables.selecting_and_printing_table(4, size_of_interval, count_of_steps)
 # forth_table_values = tables.selecting_and_geting_value_of_table(4)
-fifth_table = tables.selecting_and_printing_table(5)
-fifth_table_values = tables.selecting_and_geting_value_of_table(5)
-sixth_table = tables.selecting_and_printing_table(6, size_of_interval)
-sixth_table_values = tables.selecting_and_geting_value_of_table(6)
-pp.title("Эмпирическая функция распределения")
-pp.figure(figsize=(12, 4))
-x_list = sixth_table_values['Xi'].copy()
-y_list = fifth_table_values.copy()
-pp.plot(x_list, y_list, marker = 'o')
-pp.show()
+# fifth_table = tables.selecting_and_printing_table(5)
+# fifth_table_values = tables.selecting_and_geting_value_of_table(5)
+# sixth_table = tables.selecting_and_printing_table(6, size_of_interval)
+# sixth_table_values = tables.selecting_and_geting_value_of_table(6)
+# pp.title("Эмпирическая функция распределения")
+# pp.figure(figsize=(12, 4))
+# x_list = sixth_table_values['Xi'].copy()
+# y_list = fifth_table_values.copy()
+# pp.plot(x_list, y_list, marker = 'o')
+# pp.show()
+
+seventh_table = tables.selecting_and_printing_table(7)

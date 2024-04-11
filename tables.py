@@ -1,5 +1,5 @@
 from prettytable import PrettyTable
-from math import log10, sqrt, log
+import math
 
 
 class Tables():
@@ -25,6 +25,8 @@ class Tables():
             return self.fifth_table()
         elif number_of_table == 6:
             return self.sixth_table(size_of_interval)
+        elif number_of_table == 7:
+            return self.seventh_table()
 
     def first_table(self):
         self.list_table_1 = []
@@ -197,6 +199,36 @@ class Tables():
 
         print(table)
 
+    def seventh_table(self):
+        sample_mean = sum(self.data) / len(self.data)
+        sample_variance = 0.0
+        standard_deviation = 0
+        unique_elements = self.dict_table_3["Xi"]
+        ni_of_elements = self.dict_table_3["ni"]
+        for i in range(len(unique_elements)):
+            sample_variance += unique_elements[i]**2 * ni_of_elements[i]
+        sample_variance /= len(self.data)
+        sample_variance -= sample_mean**2
+        standard_deviation = sample_variance**0.5
+        mid_value_interval = self.dict_table_6['Xi']
+        mid_value_minus_sample_mean = []
+        ui = []
+        func_of_laplas = lambda value: (1/(math.sqrt(2* math.pi))) * math.exp(-(value**2 / 2))
+                
+
+        for i in range(len(mid_value_interval)):
+            value_interval = mid_value_interval[i] - sample_mean
+            value_ui = value_interval / standard_deviation
+            func_of_laplas(value_ui)
+            
+            
+            
+            
+            
+        print(sample_mean, sample_variance, standard_deviation)
+        pass
+    
+    
     def selecting_and_geting_value_of_table(self, number_of_table):
         if number_of_table == 1:
             return self.list_table_1
