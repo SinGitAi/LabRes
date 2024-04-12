@@ -1,4 +1,5 @@
 from prettytable import PrettyTable
+import work_csv
 import math
 
 
@@ -12,6 +13,7 @@ class Tables():
         self.dict_table_6 = None
         self.dict_table_7 = None
         self.data = data
+        self.table_laplas = work_csv.read_table_laplas()#Словарь первое значение выбираемое второе получаем
 
     def selecting_and_printing_table(self, number_of_table, size_of_interval=0, count_of_steps=0):
         if number_of_table == 1:
@@ -247,7 +249,8 @@ class Tables():
             "Ui": list_Ui,
             "laplas": list_of_fiui,
             "ni": list_of_ni,
-            "pi": list_of_pi
+            "pi": list_of_pi,
+            "standard_deviation": standard_deviation
         }
 
         print(table)
@@ -259,27 +262,80 @@ class Tables():
 
         mid_interval = self.dict_table_6['Xi']
         sorted_data = self.list_sorted_table_2.copy()
+        xi_minus_xb = self.dict_table_7["Xi"]
+        standard_deviation = self.dict_table_7["standard_deviation"]
 
         new_interval = []
         ni_of_interval = []
         Fn_func = lambda value: 0.5 + value
-        formula_func = lambda ni, nmi: ((ni - nmi) ** 2) / nmi
-        dict = {}
+        # formula_func = lambda first, second: 0 if ((first - second) ** 2) / nmi < 5 else ((first - second) ** 2)
+        formula_func = lambda first, second: ((first - second) ** 2) / nmi
+
+        s = math.sqrt((len(self.data)) / ((len(self.data))-1)) * standard_deviation
+        zi_func = lambda value: value / s
+        check_value_func = lambda value: True if value<0 else False
+        round_to_nearest_01_func = lambda value: round(value * 10) / 10
+
+        list_of_zi = []
+        list_of_Fzi = []
+        list_of_Fnxi = []
+        list_of_pmi = []
+        list_of_nmi = []
+        list_of_rez = []
+
+
         for i in range(0, len(mid_interval)+1):  # if(new_interval[i-1][0] < sorted_data[j] < new_interval[i-1][1])
             if i == 0:
                 new_interval.append(["-∞", mid_interval[0]])
                 ni_of_interval.append(_auxiliary_function_for_table_8(sorted_data, 0, new_interval[-1][1]))
+                list_of_zi.append(0)
+                list_of_Fzi.append(-0.5)
+                list_of_Fnxi.append(Fn_func(list_of_Fzi[-1]))
             elif i == len(mid_interval):
                 new_interval.append([mid_interval[-1], "∞"])
-                ni_of_interval.append(_auxiliary_function_for_table_8(sorted_data, new_interval[-1][0], new_interval[-1][0] + 100))
+                ni_of_interval.append(_auxiliary_function_for_table_8(sorted_data, new_interval[-1][0], new_interval[-1][0] + 1000))
+                list_of_zi.append(zi_func(xi_minus_xb[-1]))
+                if check_value_func(list_of_zi[-1]):
+                    list_of_Fzi.append(-1 * self.table_laplas[round_to_nearest_01_func(list_of_zi[-1]*-1)]/100000)
+                else:
+                    list_of_Fzi.append(self.table_laplas[round_to_nearest_01_func(list_of_zi[-1])]/100000)
+                list_of_Fnxi.append(Fn_func(list_of_Fzi[-1]))
             else:
                 new_interval.append([mid_interval[i-1], mid_interval[i]])
                 ni_of_interval.append(
                     _auxiliary_function_for_table_8(sorted_data, new_interval[-1][0], new_interval[-1][1]))
+                list_of_zi.append(zi_func(xi_minus_xb[i-1]))
+                if check_value_func(list_of_zi[-1]):
+                    list_of_Fzi.append(-1 * self.table_laplas[round_to_nearest_01_func(list_of_zi[-1]*-1)] / 100000)
+                else:
+                    list_of_Fzi.append(self.table_laplas[round_to_nearest_01_func(list_of_zi[-1])]/100000)
+                list_of_Fnxi.append(Fn_func(list_of_Fzi[-1]))
+        list_of_Fnxi1 = list_of_Fnxi.copy()
+        del list_of_Fnxi1[0]
+        list_of_Fnxi1.append(1)
 
 
-        print(new_interval)
-        print(ni_of_interval)
+        for i in range(len(list_of_Fnxi)):
+            if i == len(list_of_Fnxi):
+                break
+            pmi = list_of_Fnxi1[i] - list_of_Fnxi[i]
+            nmi = pmi * len(self.data)
+            formula = formula_func(ni_of_interval[i], nmi)
+            table.add_row([f"{new_interval[i][0]} ÷ {new_interval[i][1]}", ni_of_interval[i], list_of_Fzi[i], list_of_Fnxi[i], list_of_Fnxi1[i], pmi, nmi, formula])
+            list_of_pmi.append(pmi)
+            list_of_nmi.append(nmi)
+            list_of_rez.append(formula)
+        # print(s)
+        # print(new_interval)
+        # print(ni_of_interval)
+        # print(xi_minus_xb)
+        # print(list_of_zi)
+        # print(list_of_Fzi)
+        print(table)
+        print(sum(ni_of_interval))
+        print(sum(list_of_pmi))
+        print(sum(list_of_nmi))
+        print(sum(list_of_rez))
 
     def selecting_and_geting_value_of_table(self, number_of_table):
         if number_of_table == 1:
